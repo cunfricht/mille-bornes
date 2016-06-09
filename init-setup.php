@@ -5,9 +5,16 @@
      * In the event that the table already exists, the script will terminate without reinitializing the database.
      */
 
+    // there is no reason that the table creation should run indefinitely; however, for whatever reason, the creation
+    // of these 8 tables takes over a minute. not sure why.
+
+    set_time_limit(0);
+
     require_once("config.php");
-    $checkForTables = $SQL_CXN->query("SHOW TABLES LIKE `games`");
-    if($checkForTables->num_rows < 1) {
+
+    $checkForTables = $SQL_CXN->query("SELECT 1 FROM `games`");
+
+    if($checkForTables) {
         echo "The database has already been initialized.";
         exit;
     }
